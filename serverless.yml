@@ -1,0 +1,40 @@
+service: s-nap-chat
+app: s-nap-chat
+
+
+provider:
+  name: aws
+  stage: prod
+  runtime: nodejs10.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+      Resource: "arn:aws:dynamodb:us-east-1:447606329448:table/s.nap.chat"
+
+functions:
+  load:
+    handler: handler.load
+    events:
+      - http:
+          path: live/load
+          method: any
+      - http:
+          path: live/load/{url}
+          method: any
+  create:
+    handler: handler.create
+    events:
+      - http:
+          path: index/create
+          method: any
+  check:
+    handler: handler.check
+    events:
+      - http:
+          path: index/check
+          method: any
+      - http:
+          path: index/check/{url}
+          method: any
